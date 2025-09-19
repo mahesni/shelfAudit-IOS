@@ -1,0 +1,45 @@
+# Base image
+FROM python:3
+#RUN apt update
+RUN apt update --fix-missing
+
+RUN apt-get install -y python3-pip
+
+RUN pip install happybase configparser arrow datetime requests
+
+RUN apt-get install -y git-core ansible curl dos2unix
+
+RUN pip install --upgrade awscli
+
+RUN pip install behave
+
+RUN pip install PyHamcrest
+
+RUN pip install psycopg2-binary
+
+RUN pip install pytz
+
+#RUN pip install boto3
+RUN pip install boto3==1.20.30
+#1.23.28
+
+RUN mkdir /home/shelf-audit-ui-automation/
+
+COPY Automation/shelf-audit-ui-automation/ /home/shelf-audit-ui-automation/
+
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
+
+# Build arguments
+WORKDIR /home/mamautomation
+
+RUN find /home/mamautomation -name "*.sh" -print0 | xargs -0 dos2unix
+
+COPY bin/runAutomationTests.sh runAutomationTests.sh
+
+RUN dos2unix runAutomationTests.sh
+
+# Changing permission
+RUN chmod +x runAutomationTests.sh
+
+# CMD ["sh", "-c", "tail -f /dev/null"]
+CMD sh runAutomationTests.sh

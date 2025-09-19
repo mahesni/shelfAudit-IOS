@@ -1,0 +1,13 @@
+include:
+  - project: 'nielsen-media/cybersecurity/product-security/gold-config'
+    ref: main
+    file: 'Security.NLSN/security.nlsn.yml'
+  - project: nielsen-media/eng/cnc/resolution/cloud/mam/shared-gitlab-library
+    ref: master
+    file: 'service_with_automation.gitlab-ci.yml'
+
+
+variables:
+  NLSN_APP_TYPE: "webapp"
+  SAST_EXCLUDED_PATHS: "spec, test, tests, tmp, ExcludedDir"
+
